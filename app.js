@@ -29,6 +29,10 @@ $(function(){
 			"click li": "deleteItem"
 		},
 
+		initialize: function(){
+			this.listenTo(this.model, 'destroy', this.remove);
+		},
+
 		deleteItem: function(){
 			this.model.destroy();
 		}
