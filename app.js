@@ -33,10 +33,35 @@ $(function(){
 			this.listenTo(this.model, 'destroy', this.remove);
 		},
 
+		render: function(){
+			this.$el.html(this.template(this.model));
+			return this;
+		},
+
 		deleteItem: function(){
 			this.model.destroy();
 		}
 
+	});
+
+	var AppView = Backbone.View.extend({
+		el: $("#app"),
+
+		events: {
+			"keypress #new-item": "createOnEnter"
+		},
+
+		initialize: function(){
+			this.input = this.$("#new-item");
+		}
+
+		createOnEnter: function(e){
+			if(e.keyCode != 13) return;
+			if(!this.input.val()) return;
+
+			Items.create({content: this.input.val()});
+			this.input.val("");
+		}
 	});
 
 
