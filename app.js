@@ -11,6 +11,8 @@ $(function(){
 		}
 	});
 
+
+
 	var ItemList = Backbone.Collection.extend({
 		model: Item,
 
@@ -18,15 +20,20 @@ $(function(){
 
 	});
 
-	var Items = new ItemLIst();
 
-	var ItemView = Backbone.Model.extend({
+
+	var Items = new ItemList();
+
+
+
+	var ItemView = Backbone.View.extend({
 		tagName: "li",
+		className: "items",
 
-		template = _.template($('#item-template').html()),
+		template: _.template("<%= content %>"),
 
 		events: {
-			"click li": "deleteItem"
+			"click .items": "deleteItem"
 		},
 
 		initialize: function(){
@@ -34,7 +41,7 @@ $(function(){
 		},
 
 		render: function(){
-			this.$el.html(this.template(this.model));
+			this.$el.html(this.template(this.model.toJSON()));
 			return this;
 		},
 
@@ -43,6 +50,8 @@ $(function(){
 		}
 
 	});
+
+
 
 	var AppView = Backbone.View.extend({
 		el: $("#app"),
@@ -53,7 +62,14 @@ $(function(){
 
 		initialize: function(){
 			this.input = this.$("#new-item");
-		}
+
+			this.listenTo(Items, 'add', this.addOne);
+		},
+
+		addOne: function(item){
+			var view = new ItemView({model: item});
+			this.$("#main").append(view.render().el);
+		},
 
 		createOnEnter: function(e){
 			if(e.keyCode != 13) return;
@@ -64,5 +80,8 @@ $(function(){
 		}
 	});
 
+
+
+	var App = new AppView();
 
 });
