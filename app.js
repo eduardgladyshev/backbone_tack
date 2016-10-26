@@ -4,11 +4,8 @@ $(function(){
 			return {
 				content: "Empty item"
 			};
-		},
-
-		initialize: function(){
-			console.log("item model initialized");
 		}
+
 	});
 
 
@@ -33,7 +30,7 @@ $(function(){
 		template: _.template("<%= content %>"),
 
 		events: {
-			"click .items": "deleteItem"
+			"click": "deleteItem"
 		},
 
 		initialize: function(){
@@ -64,6 +61,8 @@ $(function(){
 			this.input = this.$("#new-item");
 
 			this.listenTo(Items, 'add', this.addOne);
+
+			Items.fetch();
 		},
 
 		addOne: function(item){
@@ -83,5 +82,6 @@ $(function(){
 
 
 	var App = new AppView();
+
 
 });
