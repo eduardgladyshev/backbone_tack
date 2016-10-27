@@ -67,7 +67,7 @@ $(function(){
 
 		addOne: function(item){
 			var view = new ItemView({model: item});
-			this.$("#main").append(view.render().el);
+			this.$("#item-list").append(view.render().el);
 		},
 
 		createOnEnter: function(e){
