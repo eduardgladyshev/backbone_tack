@@ -25,12 +25,12 @@ $(function(){
 
 	var ItemView = Backbone.View.extend({
 		tagName: "li",
-		className: "items",
+		className: "item",
 
-		template: _.template("<%= content %>"),
+		template: _.template($("#item-template").html()),
 
 		events: {
-			"click": "deleteItem"
+			"click .destroy": "deleteItem"
 		},
 
 		initialize: function(){
