@@ -30,16 +30,43 @@ $(function(){
 		template: _.template($("#item-template").html()),
 
 		events: {
-			"click .destroy": "deleteItem"
+			"click": "edit",
+			"click .destroy": "deleteItem",
+			"blur .edit": "close",
+			"keypress .edit": "updateOnEnter"
 		},
 
 		initialize: function(){
+			this.listenTo(this.model, 'change', this.render);
 			this.listenTo(this.model, 'destroy', this.remove);
 		},
 
 		render: function(){
 			this.$el.html(this.template(this.model.toJSON()));
+			this.input = this.$(".edit");
 			return this;
+		},
+
+		edit: function(){
+			this.$el.addClass("editing");
+			this.input.focus();
+		},
+
+		close: function(){
+			var value = this.input.val();
+			if(!value){
+				this.deleteItem();
+			} else{
+				this.model.save({content: value});
+				this.$el.removeClass("editing");
+
+			}
+		},
+
+		updateOnEnter: function(e){
+			if(e.keyCode == 13) {
+				this.close();
+			}
 		},
 
 		deleteItem: function(){

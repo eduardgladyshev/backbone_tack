@@ -12,7 +12,7 @@
 <body>
 
 	<div id="app">
-		<h1>Введите заголовок</h1>
+		<h1>Заголовок</h1>
 		<ul id="item-list"></ul>
 		<input type="text" id="new-item" placeholder="Новый пункт...">
 	</div>
@@ -20,8 +20,10 @@
 	<script src="app.js"></script>
 
 	<script type="text/template" id="item-template">
-		<span><%- content %></span>
-		<a class="destroy"></a>
+		<div class="view">
+			<span><%- content %></span>
+			<a class="destroy"></a>
+		</div>
 		<input type="text" class="edit" value="<%- content %>">
 	</script>
 </body>
