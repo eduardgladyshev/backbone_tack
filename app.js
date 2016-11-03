@@ -9,7 +9,6 @@ $(function(){
 	});
 
 
-
 	var ItemList = Backbone.Collection.extend({
 		model: Item,
 
@@ -18,9 +17,7 @@ $(function(){
 	});
 
 
-
 	var Items = new ItemList();
-
 
 
 	var ItemView = Backbone.View.extend({
@@ -31,9 +28,9 @@ $(function(){
 
 		events: {
 			"click": "edit",
-			"click .destroy": "deleteItem",
-			"blur .edit": "close",
-			"keypress .edit": "updateOnEnter"
+			"click .button-delete": "deleteItem",
+			"blur .input-item_edit": "close",
+			"keypress .input-item_edit": "updateOnEnter"
 		},
 
 		initialize: function(){
@@ -43,12 +40,12 @@ $(function(){
 
 		render: function(){
 			this.$el.html(this.template(this.model.toJSON()));
-			this.input = this.$(".edit");
+			this.input = this.$(".input-item_edit");
 			return this;
 		},
 
 		edit: function(){
-			this.$el.addClass("editing");
+			this.$el.addClass("item_editing");
 			this.input.focus();
 		},
 
@@ -58,8 +55,7 @@ $(function(){
 				this.deleteItem();
 			} else{
 				this.model.save({content: value});
-				this.$el.removeClass("editing");
-
+				this.$el.removeClass("item_editing");
 			}
 		},
 
@@ -81,11 +77,11 @@ $(function(){
 		el: $("#app"),
 
 		events: {
-			"keypress #new-item": "createOnEnter"
+			"keypress .item-input": "createOnEnter"
 		},
 
 		initialize: function(){
-			this.input = this.$("#new-item");
+			this.input = this.$(".item-input");
 
 			this.listenTo(Items, 'add', this.addOne);
 
@@ -94,7 +90,7 @@ $(function(){
 
 		addOne: function(item){
 			var view = new ItemView({model: item});
-			this.$("#item-list").append(view.render().el);
+			this.$(".item-list").append(view.render().el);
 		},
 
 		createOnEnter: function(e){
