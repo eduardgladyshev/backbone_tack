@@ -9,6 +9,7 @@ $(function(){
 
 		toggle: function(){
 			this.save({done: !this.get("done")});
+			console.log(`save model with atribute done: ${this.get('done')}`);
 		}
 
 	});
@@ -32,11 +33,11 @@ $(function(){
 		template: _.template($("#item-template").html()),
 
 		events: {
-			"click .toggle": "toggleDone",
-			"click .item__content": "edit",
+			"click .item__checkbox-done": "toggleDone",
+			"click .item__view": "edit",
 			"click .button-delete": "deleteItem",
-			"blur .input-item_edit": "close",
-			"keypress .input-item_edit": "updateOnEnter"
+			"blur .item-input_edit": "close",
+			"keypress .item-input_edit": "updateOnEnter"
 		},
 
 		initialize: function(){
@@ -46,8 +47,9 @@ $(function(){
 
 		render: function(){
 			this.$el.html(this.template(this.model.toJSON()));
-			this.input = this.$(".input-item_edit");
+			this.input = this.$(".item-input_edit");
 			this.$el.toggleClass("item_done", this.model.get("done"));
+			this.$(".item__checkbox-done").prop("checked", this.model.get("done"));
 			return this;
 		},
 

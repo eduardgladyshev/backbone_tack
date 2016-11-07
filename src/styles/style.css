@@ -1,13 +1,12 @@
 $grey: #f8f7f7;
 $strong-grey: #dbdbdb;
 *{
-	border-sizing: border-box;
+	box-sizing: border-box;
 }
 .note {
 	width: 600px;
 	margin: 0 auto;
 	padding: 15px;
-	box-sizing: border-box;
 	font-size: 15px;
 	background-color: $grey;
 	border-radius: 5px;
@@ -64,7 +63,10 @@ $strong-grey: #dbdbdb;
 		position: absolute;
 		top: 5px;
 		left: 5px;
-
+	}
+	&_done {
+		text-decoration: line-through;
+		color: $strong-grey;
 	}
 }
 
