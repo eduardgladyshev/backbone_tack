@@ -1,10 +1,15 @@
 var gulp = require('gulp'),
 	postcss = require('gulp-postcss'),
-	precss = require('precss'),
-	autopref = require('autoprefixer');
+	scss = require('postcss-scss'),
+	precss = require('precss');
 
 gulp.task("default", function(){
+	return gulp.src('./src/styles/*.css')
+		.pipe( postcss( [precss({syntax: scss}) ] ))
+		.pipe(gulp.dest('./dest/'));
+});
 
-
-	return gulp.src('./src/css/*.css').pipe(postcss( [precss] )).pipe(gulp.dest('./dest'));
+gulp.watch('./src/styles/**', () => {
+	gulp.run();
+	console.log("run gulp.watch"); 
 });

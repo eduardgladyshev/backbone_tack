@@ -1,0 +1,114 @@
+$grey: #f8f7f7;
+$strong-grey: #dbdbdb;
+*{
+	border-sizing: border-box;
+}
+.note {
+	width: 600px;
+	margin: 0 auto;
+	padding: 15px;
+	box-sizing: border-box;
+	font-size: 15px;
+	background-color: $grey;
+	border-radius: 5px;
+
+	&__title{
+		margin: 0;
+		padding-bottom: 15px;
+		font-size: 20px;
+	}
+}
+.item-list{
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+.item{
+	position: relative;
+	height: 30px;
+	line-height: 30px;
+	vertical-align: middle;
+	
+	&__view{
+		margin-left: 25px;
+		&:hover .button-delete{
+			display: block;
+		}
+	}
+	&_editing &__view{
+		display: none;
+	}
+	&_editing &-input_edit{
+		display: inline-block;
+	}
+	&-input{
+		width: calc(100% - 25px);
+		height: 30px;
+		font-family: serif;
+		font-size: 15px;
+		box-sizing: border-box;
+		border: none;
+		background-color: $grey; 
+
+		&:focus{
+			outline: none;
+			border-top: 1px solid $strong-grey;
+			border-bottom: 1px solid $strong-grey;
+		}
+	}
+	&-input_edit{
+		display: none;
+		margin-left: 25px;
+	}
+	&__checkbox-done {
+		position: absolute;
+		top: 5px;
+		left: 5px;
+
+	}
+}
+
+.button-delete{
+	display: none;
+	position: absolute;
+	margin: 5px;
+	right: 5px;
+	top: 0;
+	width: 20px;
+	height: 20px;
+	cursor: pointer;
+	color: #fff;
+	text-align: center;
+	background: url(img/destroy.png) no-repeat;
+	&:hover{
+		background-position: 0 -20px;
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

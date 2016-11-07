@@ -33,7 +33,7 @@ $(function(){
 
 		events: {
 			"click .toggle": "toggleDone",
-			"click": "edit",
+			"click .item__content": "edit",
 			"click .button-delete": "deleteItem",
 			"blur .input-item_edit": "close",
 			"keypress .input-item_edit": "updateOnEnter"
@@ -47,6 +47,7 @@ $(function(){
 		render: function(){
 			this.$el.html(this.template(this.model.toJSON()));
 			this.input = this.$(".input-item_edit");
+			this.$el.toggleClass("item_done", this.model.get("done"));
 			return this;
 		},
 

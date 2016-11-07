@@ -22,9 +22,9 @@
 	<script src="app.js"></script>
 
 	<script type="text/template" id="item-template">
-		<div class="view">
-			<input type="checkbox" class="toggle" <% this.model.done? 'checked="checked"': "" %>>
-			<span><%- content %></span>
+		<input type="checkbox" class="item__checkbox-done">
+		<div class="item__view">
+			<span class="item__content"> <%- content %> </span>
 			<a class="button-delete"></a>
 		</div>
 		<input type="text" class="item-input item-input_edit" value="<%- content %>">
