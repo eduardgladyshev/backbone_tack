@@ -23,6 +23,7 @@
 
 	<script type="text/template" id="item-template">
 		<div class="view">
+			<input type="checkbox" class="toggle" <% this.model.done? 'checked="checked"': "" %>>
 			<span><%- content %></span>
 			<a class="button-delete"></a>
 		</div>

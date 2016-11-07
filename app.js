@@ -2,8 +2,13 @@ $(function(){
 	var Item = Backbone.Model.extend({
 		default: function(){
 			return {
-				content: "Empty item"
+				content: "Empty item",
+				done: false
 			};
+		},
+
+		toggle: function(){
+			this.save({done: !this.get("done")});
 		}
 
 	});
@@ -27,6 +32,7 @@ $(function(){
 		template: _.template($("#item-template").html()),
 
 		events: {
+			"click .toggle": "toggleDone",
 			"click": "edit",
 			"click .button-delete": "deleteItem",
 			"blur .input-item_edit": "close",
@@ -42,6 +48,10 @@ $(function(){
 			this.$el.html(this.template(this.model.toJSON()));
 			this.input = this.$(".input-item_edit");
 			return this;
+		},
+
+		toggleDone: function(){
+			this.model.toggle();
 		},
 
 		edit: function(){

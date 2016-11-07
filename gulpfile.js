@@ -1,9 +1,10 @@
 var gulp = require('gulp'),
 	postcss = require('gulp-postcss'),
+	precss = require('precss'),
 	autopref = require('autoprefixer');
 
-gulp.task("test", function(){
-	return gulp.src('./src/css/*.css')
-		.pipe(require('precss'))
-		.pipe(gulp.dest('./dest'));
+gulp.task("default", function(){
+
+
+	return gulp.src('./src/css/*.css').pipe(postcss( [precss] )).pipe(gulp.dest('./dest'));
 });
