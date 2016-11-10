@@ -1,15 +1,14 @@
 $(function(){
 	var Item = Backbone.Model.extend({
-		default: function(){
+		defaults: function(){
 			return {
-				content: "Empty item",
-				done: false
+				done: false,
+				order: Items.setOrder()
 			};
 		},
 
 		toggle: function(){
 			this.save({done: !this.get("done")});
-			console.log(`save model with atribute done: ${this.get('done')}`);
 		}
 
 	});
@@ -17,8 +16,12 @@ $(function(){
 
 	var ItemList = Backbone.Collection.extend({
 		model: Item,
-
 		localStorage: new Backbone.LocalStorage("list-storage"),
+
+		setOrder: function(){
+			if(!this.length) return 1;
+			return this.last().get("order") + 1;
+		}
 
 	});
 
@@ -29,7 +32,6 @@ $(function(){
 	var ItemView = Backbone.View.extend({
 		tagName: "li",
 		className: "item",
-
 		template: _.template($("#item-template").html()),
 
 		events: {
@@ -80,6 +82,9 @@ $(function(){
 
 		deleteItem: function(){
 			this.model.destroy();
+			// Items.each((item, i) => {
+			// 	item.set({order: ++i});
+			// });
 		}
 
 	});
@@ -94,8 +99,18 @@ $(function(){
 		},
 
 		initialize: function(){
-			this.input = this.$(".item-input");
+			this.sortableWrap = this.$(".item-list");
 
+			this.sortableWrap.sortable({
+				containment: "parent",
+				classes: { "ui-sortable-helper": "item_move"  },
+				cursor: "move",
+				opacity: 0.8,
+				tolerance: "pointer",
+
+			});
+
+			this.input = this.$(".item-input");
 			this.listenTo(Items, 'add', this.addOne);
 
 			Items.fetch();
@@ -104,6 +119,10 @@ $(function(){
 		addOne: function(item){
 			var view = new ItemView({model: item});
 			this.$(".item-list").append(view.render().el);
+			// Items.each((item) => {
+			// 	console.log(item.get("content") + " - " + item.get("order"));
+			// });
+			console.log(this.sortableWrap);
 		},
 
 		createOnEnter: function(e){
@@ -113,6 +132,7 @@ $(function(){
 			Items.create({content: this.input.val()});
 			this.input.val("");
 		}
+
 	});
 
 
