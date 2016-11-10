@@ -45,6 +45,7 @@ $(function(){
 		initialize: function(){
 			this.listenTo(this.model, 'change', this.render);
 			this.listenTo(this.model, 'destroy', this.remove);
+			this.listenTo(App, 'sortEnd', this.getPosition);
 		},
 
 		render: function(){
@@ -52,6 +53,7 @@ $(function(){
 			this.input = this.$(".item-input_edit");
 			this.$el.toggleClass("item_done", this.model.get("done"));
 			this.$(".item__checkbox-done").prop("checked", this.model.get("done"));
+			//this.getPosition();
 			return this;
 		},
 
@@ -85,6 +87,10 @@ $(function(){
 			// Items.each((item, i) => {
 			// 	item.set({order: ++i});
 			// });
+		},
+
+		getPosition: function(){
+			console.log(`Index: ${this.$el.index()}, content: ${this.model.get("content")}, order: ${this.model.get("order")} `);
 		}
 
 	});
@@ -99,6 +105,7 @@ $(function(){
 		},
 
 		initialize: function(){
+			var self = this;
 			this.sortableWrap = this.$(".item-list");
 
 			this.sortableWrap.sortable({
@@ -107,6 +114,10 @@ $(function(){
 				cursor: "move",
 				opacity: 0.8,
 				tolerance: "pointer",
+
+				update: function(){
+					self.a();
+				}
 
 			});
 
@@ -131,6 +142,12 @@ $(function(){
 
 			Items.create({content: this.input.val()});
 			this.input.val("");
+		}, 
+
+		a: function(){
+			Items.each((item) => {
+				console.log(item.ItemView);
+			});
 		}
 
 	});
