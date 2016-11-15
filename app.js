@@ -19,12 +19,15 @@ $(function(){
 		localStorage: new Backbone.LocalStorage("list-storage"),
 
 		setOrder: function(){
-			if(!this.length) return 1;
+			if(!this.length) return 0;
 			return this.last().get("order") + 1;
+		}, 
+
+		comparator: function(model){
+			return model.get("order");
 		}
 
 	});
-
 
 	var Items = new ItemList();
 
@@ -39,13 +42,13 @@ $(function(){
 			"click .item__view": "edit",
 			"click .button-delete": "deleteItem",
 			"blur .item-input_edit": "close",
-			"keypress .item-input_edit": "updateOnEnter"
+			"keypress .item-input_edit": "updateOnEnter",
+			"drop": "drop"
 		},
 
 		initialize: function(){
 			this.listenTo(this.model, 'change', this.render);
 			this.listenTo(this.model, 'destroy', this.remove);
-			this.listenTo(App, 'sortEnd', this.getPosition);
 		},
 
 		render: function(){
@@ -53,7 +56,6 @@ $(function(){
 			this.input = this.$(".item-input_edit");
 			this.$el.toggleClass("item_done", this.model.get("done"));
 			this.$(".item__checkbox-done").prop("checked", this.model.get("done"));
-			//this.getPosition();
 			return this;
 		},
 
@@ -84,13 +86,10 @@ $(function(){
 
 		deleteItem: function(){
 			this.model.destroy();
-			// Items.each((item, i) => {
-			// 	item.set({order: ++i});
-			// });
 		},
 
-		getPosition: function(){
-			console.log(`Index: ${this.$el.index()}, content: ${this.model.get("content")}, order: ${this.model.get("order")} `);
+		drop: function(event, index){
+			this.$el.trigger("updateSort", [this.model, index]);
 		}
 
 	});
@@ -99,13 +98,15 @@ $(function(){
 
 	var AppView = Backbone.View.extend({
 		el: $("#app"),
+		collection: Items,
 
 		events: {
-			"keypress .item-input": "createOnEnter"
+			"keypress .item-input": "createOnEnter",
+			"updateSort": "updateSort"
 		},
 
 		initialize: function(){
-			var self = this;
+
 			this.sortableWrap = this.$(".item-list");
 
 			this.sortableWrap.sortable({
@@ -115,8 +116,8 @@ $(function(){
 				opacity: 0.8,
 				tolerance: "pointer",
 
-				update: function(){
-					self.a();
+				update: function(event, ui){
+					ui.item.trigger('drop', ui.item.index());
 				}
 
 			});
@@ -130,10 +131,7 @@ $(function(){
 		addOne: function(item){
 			var view = new ItemView({model: item});
 			this.$(".item-list").append(view.render().el);
-			// Items.each((item) => {
-			// 	console.log(item.get("content") + " - " + item.get("order"));
-			// });
-			console.log(this.sortableWrap);
+
 		},
 
 		createOnEnter: function(e){
@@ -142,19 +140,33 @@ $(function(){
 
 			Items.create({content: this.input.val()});
 			this.input.val("");
-		}, 
+		},
 
-		a: function(){
-			Items.each((item) => {
-				console.log(item.ItemView);
+		updateSort: function(event, model, position){
+			this.collection.remove(model);
+
+			this.collection.each((model, index) => {
+				var order = index;
+				if(index >= position){
+					order += 1;
+				}
+				model.set('order', order);
+				model.save({'order': order});
 			});
+
+			model.set('order', position);
+			this.collection.add(model, {
+				at: position,
+				silent: true
+			});
+			model.save({'order': position});
+
 		}
 
 	});
 
-
-
 	var App = new AppView();
 
+	window.collection = Items;
 
 });
