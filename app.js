@@ -106,7 +106,6 @@ $(function(){
 		},
 
 		initialize: function(){
-
 			this.sortableWrap = this.$(".item-list");
 
 			this.sortableWrap.sortable({
@@ -123,15 +122,25 @@ $(function(){
 			});
 
 			this.input = this.$(".item-input");
-			this.listenTo(Items, 'add', this.addOne);
 
-			Items.fetch();
+			this.listenTo(Items, 'add', this.addOne);
+			this.listenTo(Items, 'reset', this.addAll);
+			//for dubug
+			this.listenTo(Items, 'all', (event) => {
+				console.log(`event: ${event}`);
+			});
+
+			Items.fetch({reset: true});
 		},
 
 		addOne: function(item){
 			var view = new ItemView({model: item});
 			this.$(".item-list").append(view.render().el);
 
+		},
+
+		addAll: function(){
+			Items.each(this.addOne, this);
 		},
 
 		createOnEnter: function(e){
